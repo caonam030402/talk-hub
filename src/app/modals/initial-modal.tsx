@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -14,7 +15,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -25,24 +25,26 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import FileUpload from "@/components/file-upload";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  serverName: z.string().min(6, {
+  name: z.string().min(6, {
     message: "Username must be at least 2 characters.",
   }),
-  image: z.string().min(6, {
+  imageUrl: z.string().min(6, {
     message: "Username must be at least 2 characters.",
   }),
 });
 
 export default function InitialModal() {
   const [isMounted, setIsMounted] = useState(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      serverName: "",
-      image: "",
+      name: "",
+      imageUrl: "",
     },
   });
 
@@ -52,8 +54,11 @@ export default function InitialModal() {
 
   const isLoading = form.formState.isSubmitting;
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    await axios.post("api/servers", values);
+    form.reset();
+    router.refresh();
+    window.location.reload();
   }
 
   if (!isMounted) {
@@ -81,7 +86,7 @@ export default function InitialModal() {
               >
                 <FormField
                   control={form.control}
-                  name="image"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl className="">
@@ -96,7 +101,7 @@ export default function InitialModal() {
                 />
                 <FormField
                   control={form.control}
-                  name="serverName"
+                  name="imageUrl"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className={cn("text-xs uppercase text-right")}>
