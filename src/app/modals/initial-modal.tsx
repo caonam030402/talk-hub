@@ -86,7 +86,7 @@ export default function InitialModal() {
               >
                 <FormField
                   control={form.control}
-                  name="name"
+                  name="imageUrl"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl className="">
@@ -101,7 +101,7 @@ export default function InitialModal() {
                 />
                 <FormField
                   control={form.control}
-                  name="imageUrl"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className={cn("text-xs uppercase text-right")}>
