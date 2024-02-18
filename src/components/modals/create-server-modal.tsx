@@ -1,5 +1,3 @@
-"use client";
-
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -10,7 +8,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -23,7 +20,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 import FileUpload from "@/components/file-upload";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
@@ -54,10 +50,14 @@ export default function CreateServerModal() {
   const isLoading = form.formState.isSubmitting;
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await axios.post("api/servers", values);
-    form.reset();
-    router.refresh();
-    window.location.reload();
+    try {
+      await axios.post("/api/servers", values);
+      form.reset();
+      router.refresh();
+      onClose();
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   const handleClose = () => {

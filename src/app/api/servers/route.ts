@@ -26,7 +26,7 @@ export async function POST(req: Request) {
         members: { create: { profileId: profile.id, role: MemberRole.ADMIN } },
       },
     });
-    console.log(server);
+
     return NextResponse.json(server);
   } catch (err) {
     console.log(err);
